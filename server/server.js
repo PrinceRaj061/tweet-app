@@ -11,9 +11,13 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // MongoDB connection
-mongoose.connect('mongodb://localhost/twitter-clone', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect('mongodb://localhost/twitter-app', { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => console.log('MongoDB connected'))
     .catch(err => console.log(err));
+
+// Routes
+app.use('/api/auth', require('./routes/auth'));
+app.use('/api/tweets', require('./routes/tweet'));
 
 // Start the server
 const PORT = process.env.PORT || 5000;
