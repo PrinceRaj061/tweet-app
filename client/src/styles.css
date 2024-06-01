@@ -88,3 +88,39 @@ pre {
 .comments strong {
     margin-right: 5px;
 }
+
+.navbar {
+    background-color: #1da1f2;
+    padding: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+}
+
+.navbar ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+.navbar ul li {
+    margin: 0 10px;
+}
+
+.navbar ul li a,
+.navbar ul li button {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    padding: 10px 15px;
+    border-radius: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.navbar ul li button:hover,
+.navbar ul li a:hover {
+    background-color: #0d8bec;
+}

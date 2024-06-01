@@ -101,5 +101,15 @@ app.post('/api/tweets/:id/comments', async (req, res) => {
     res.send(tweet);
 });
 
+app.get('/api/tweets/my-tweets', async (req, res) => {
+    console.log("/api/tweets/my-tweets" + req.body);
+    const token = req.header('x-auth-token');
+    const userId = token; // Replace with actual user ID from token
+
+    const tweets = await Tweet.find({ user: userId }).populate('user').populate('comments.user');
+    res.send(tweets);
+});
+
+
 const port = process.env.PORT || 5000;
 app.listen(port, () => console.log(`Server running on port ${port}`));
