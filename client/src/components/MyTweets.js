@@ -4,6 +4,7 @@ import './../styles.css';
 
 function MyTweets({ token }) {
     const [tweets, setTweets] = useState([]);
+    const [isEditing, setIsEditing] = useState(false);
 
     useEffect(() => {
         const fetchMyTweets = async () => {
@@ -20,6 +21,17 @@ function MyTweets({ token }) {
         fetchMyTweets();
     }, [token]);
 
+    const handleDelete = async (id) => {
+        try {
+            await axios.delete(`http://localhost:5000/api/tweets/${id}`, {
+                headers: { 'x-auth-token': token }
+            });
+            setTweets(tweets.filter(tweet => tweet._id !== id));
+        } catch (err) {
+            console.error(err.response.data);
+        }
+    };
+
     return (
         <div className="container">
             <h1>My Tweets</h1>
@@ -32,6 +44,10 @@ function MyTweets({ token }) {
                         </div>
                         <p>{tweet.content}</p>
                         {tweet.code && <pre><code>{tweet.code}</code></pre>}
+                        <button onClick={() => setIsEditing(true)}>Edit</button>
+                        <button className="delete-button" onClick={() => handleDelete(tweet?._id)}>
+                                Delete
+                            </button>
                         <ul>
                             {tweet.comments.map(comment => (
                                 <li key={comment._id}>

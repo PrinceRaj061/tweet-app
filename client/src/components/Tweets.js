@@ -47,17 +47,6 @@ function Tweets({ token }) {
         }
     };
 
-    const handleDelete = async (id) => {
-        try {
-            await axios.delete(`http://localhost:5000/api/tweets/${id}`, {
-                headers: { 'x-auth-token': token }
-            });
-            setTweets(tweets.filter(tweet => tweet._id !== id));
-        } catch (err) {
-            console.error(err.response.data);
-        }
-    };
-
     return (
         <div className="container">
             <ul>
@@ -72,9 +61,6 @@ function Tweets({ token }) {
                         <div>
                             <button onClick={() => handleLike(tweet?._id)}>
                                 {tweet?.likes.includes('user_id_from_token') ? 'Unlike' : 'Like'} ({tweet?.likes?.length})
-                            </button>
-                            <button className="delete-button" onClick={() => handleDelete(tweet?._id)}>
-                                Delete
                             </button>
                         </div>
                         <ul>

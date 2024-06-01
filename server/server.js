@@ -110,6 +110,22 @@ app.get('/api/tweets/my-tweets', async (req, res) => {
     res.send(tweets);
 });
 
+
+// Route to get the authenticated user's details
+app.get('/api/users/me', async (req, res) => {
+    const token = req.header('x-auth-token');
+    const userId = token;
+
+    const user = await User.findById(userId);
+
+    if (user) {
+        res.send(user);
+    } else {
+        res.status(404).send('User not found');
+    }
+});
+
+// Route to update the authenticated user's details
 app.put('/api/users/:id', async (req, res) => {
     const { id } = req.params;
     const { username, email, password, avatar } = req.body;
@@ -126,6 +142,7 @@ app.put('/api/users/:id', async (req, res) => {
         res.status(404).send('User not found');
     }
 });
+
 
 
 const port = process.env.PORT || 5000;
