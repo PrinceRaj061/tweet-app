@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Login from './components/Login';
 import Register from './components/Register';
 import Tweets from './components/Tweets';
+import './styles.css';
 
 function App() {
     const [token, setToken] = useState('');

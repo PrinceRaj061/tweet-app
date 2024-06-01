@@ -8,7 +8,7 @@ router.post('/', auth, async (req, res) => {
     const { content } = req.body;
     try {
         const newTweet = new Tweet({
-            user: req.user.id,
+            userEmail: req.user.userEmail,
             content
         });
         await newTweet.save();
