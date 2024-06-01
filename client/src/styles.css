@@ -19,7 +19,7 @@ form {
     flex-direction: column;
 }
 
-input[type="text"], textarea {
+input[type="text"], input[type="email"], input[type="password"], textarea {
     padding: 10px;
     margin-bottom: 10px;
     border: 1px solid #ddd;
@@ -123,4 +123,14 @@ pre {
 .navbar ul li button:hover,
 .navbar ul li a:hover {
     background-color: #0d8bec;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
 }

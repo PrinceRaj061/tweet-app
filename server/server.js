@@ -110,6 +110,23 @@ app.get('/api/tweets/my-tweets', async (req, res) => {
     res.send(tweets);
 });
 
+app.put('/api/users/:id', async (req, res) => {
+    const { id } = req.params;
+    const { username, email, password, avatar } = req.body;
+
+    const updatedUser = await User.findByIdAndUpdate(
+        id,
+        { username, email, password, avatar },
+        { new: true }
+    );
+
+    if (updatedUser) {
+        res.send(updatedUser);
+    } else {
+        res.status(404).send('User not found');
+    }
+});
+
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => console.log(`Server running on port ${port}`));
