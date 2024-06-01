@@ -19,7 +19,7 @@ form {
     flex-direction: column;
 }
 
-input[type="text"] {
+input[type="text"], textarea {
     padding: 10px;
     margin-bottom: 10px;
     border: 1px solid #ddd;
@@ -61,6 +61,13 @@ li {
     margin-right: 10px;
 }
 
+pre {
+    background-color: #f7f7f7;
+    padding: 10px;
+    border-radius: 5px;
+    overflow-x: auto;
+}
+
 .delete-button {
     background-color: #ff4d4d;
     margin-left: 10px;
@@ -68,4 +75,16 @@ li {
 
 .delete-button:hover {
     background-color: #ff0000;
+}
+
+.comments {
+    margin-top: 10px;
+}
+
+.comments li {
+    padding: 5px 0;
+}
+
+.comments strong {
+    margin-right: 5px;
 }

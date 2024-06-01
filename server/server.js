@@ -13,10 +13,18 @@ const userSchema = new mongoose.Schema({
     avatar: String,
 });
 
+const commentSchema = new mongoose.Schema({
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    content: String,
+    createdAt: { type: Date, default: Date.now },
+});
+
 const tweetSchema = new mongoose.Schema({
     content: String,
-    //user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    userEmail: String,
+    code: String,
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+    comments: [commentSchema],
     createdAt: { type: Date, default: Date.now },
 });
 
@@ -32,35 +40,30 @@ app.post('/api/users', async (req, res) => {
     const { username, email, password, avatar } = req.body;
     const user = new User({ username, email, password, avatar });
     await user.save();
-    res.send({ token: email });
+    res.send({ token: user.id });
 });
 
 app.post('/api/auth', async (req, res) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
     if (user && user.password === password) {
-        res.send({ token: email });
+        res.send({ token: user.id });
     } else {
         res.status(400).send('Invalid credentials');
     }
 });
 
 app.get('/api/tweets', async (req, res) => {
-    const tweets = await Tweet.find().populate('userEmail');
+    const tweets = await Tweet.find().populate('user').populate('comments.user');
     res.send(tweets);
 });
 
 app.post('/api/tweets', async (req, res) => {
-    const { content } = req.body;
+    const { content, code } = req.body;
     const token = req.header('x-auth-token');
-    // Here, you should authenticate the user based on the token.
-    // For demonstration purposes, we'll assume the user is already authenticated.
+    const userId = token; // Replace with actual user ID from token
 
-    // For the actual application, you should replace the next line with code to
-    // retrieve the user ID from the token and create the tweet with that user ID.
-    const userEmail = token;
-
-    const tweet = new Tweet({ content, userEmail: userEmail });
+    const tweet = new Tweet({ content, code, user: userId });
     await tweet.save();
     res.send(tweet);
 });
@@ -71,6 +74,32 @@ app.delete('/api/tweets/:id', async (req, res) => {
     res.send('Tweet deleted successfully');
 });
 
+app.post('/api/tweets/:id/like', async (req, res) => {
+    const { id } = req.params;
+    const token = req.header('x-auth-token');
+    const userId = token; // Replace with actual user ID from token
+
+    const tweet = await Tweet.findById(id);
+    if (tweet.likes.includes(userId)) {
+        tweet.likes.pull(userId);
+    } else {
+        tweet.likes.push(userId);
+    }
+    await tweet.save();
+    res.send(tweet);
+});
+
+app.post('/api/tweets/:id/comments', async (req, res) => {
+    const { id } = req.params;
+    const { content } = req.body;
+    const token = req.header('x-auth-token');
+    const userId = token; // Replace with actual user ID from token
+
+    const tweet = await Tweet.findById(id);
+    tweet.comments.push({ user: userId, content });
+    await tweet.save();
+    res.send(tweet);
+});
+
 const port = process.env.PORT || 5000;
 app.listen(port, () => console.log(`Server running on port ${port}`));
-
