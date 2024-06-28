@@ -2,6 +2,11 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const app = express();
+const dotenv = require('dotenv');
+
+dotenv.config();
+
+
 
 app.use(cors());
 app.use(express.json());
@@ -31,10 +36,16 @@ const tweetSchema = new mongoose.Schema({
 const User = mongoose.model('User', userSchema);
 const Tweet = mongoose.model('Tweet', tweetSchema);
 
-mongoose.connect('mongodb://localhost:27017/twitter-clone', {
+console.log(process.env.MONGODB_URL);
+
+mongoose.connect(process.env.MONGODB_URL, {
+    
     useNewUrlParser: true,
-    useUnifiedTopology: true,
-});
+    useUnifiedTopology: true
+})
+.then(() => console.log('MongoDB connected...'))
+.catch((err) => console.error('MongoDB connection error:', err));
+
 
 app.post('/api/users', async (req, res) => {
     const { username, email, password, avatar } = req.body;
@@ -102,7 +113,6 @@ app.post('/api/tweets/:id/comments', async (req, res) => {
 });
 
 app.get('/api/tweets/my-tweets', async (req, res) => {
-    console.log("/api/tweets/my-tweets" + req.body);
     const token = req.header('x-auth-token');
     const userId = token; // Replace with actual user ID from token
 

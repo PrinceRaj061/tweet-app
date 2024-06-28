@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { FaEdit, FaTrashAlt } from 'react-icons/fa';
 import axios from 'axios';
 import './../styles.css';
 
@@ -44,9 +45,9 @@ function MyTweets({ token }) {
                         </div>
                         <p>{tweet.content}</p>
                         {tweet.code && <pre><code>{tweet.code}</code></pre>}
-                        <button onClick={() => setIsEditing(true)}>Edit</button>
+                        <button onClick={() => setIsEditing(true)}>< FaEdit /></button>
                         <button className="delete-button" onClick={() => handleDelete(tweet?._id)}>
-                                Delete
+                                < FaTrashAlt />
                             </button>
                         <ul>
                             {tweet.comments.map(comment => (

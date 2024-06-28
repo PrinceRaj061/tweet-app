@@ -1,21 +1,24 @@
 import React, { useState, useEffect } from 'react';
+import { FaThumbsUp } from 'react-icons/fa';
 import axios from 'axios';
 import './../styles.css';
 
 function Tweets({ token }) {
     const [tweets, setTweets] = useState([]);
 
+    const fetchTweets = async () => {
+        try {
+            const res = await axios.get('http://localhost:5000/api/tweets', {
+                headers: { 'x-auth-token': token }
+            });
+            setTweets(res.data);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+    
     useEffect(() => {
-        const fetchTweets = async () => {
-            try {
-                const res = await axios.get('http://localhost:5000/api/tweets', {
-                    headers: { 'x-auth-token': token }
-                });
-                setTweets(res.data);
-            } catch (err) {
-                console.error(err);
-            }
-        };
+        
 
         fetchTweets();
     }, [token]);
@@ -28,7 +31,7 @@ function Tweets({ token }) {
                 {},
                 { headers: { 'x-auth-token': token } }
             );
-            setTweets(tweets.map(tweet => (tweet._id === id ? res.data : tweet)));
+            fetchTweets();
         } catch (err) {
             console.error(err.response.data);
         }
@@ -41,7 +44,7 @@ function Tweets({ token }) {
                 { content: comment },
                 { headers: { 'x-auth-token': token } }
             );
-            setTweets(tweets.map(tweet => (tweet._id === id ? res.data : tweet)));
+            fetchTweets();
         } catch (err) {
             console.error(err.response.data);
         }
@@ -60,7 +63,7 @@ function Tweets({ token }) {
                         {tweet.code && <pre><code>{tweet?.code}</code></pre>}
                         <div>
                             <button onClick={() => handleLike(tweet?._id)}>
-                                {tweet?.likes.includes('user_id_from_token') ? 'Unlike' : 'Like'} ({tweet?.likes?.length})
+                            <FaThumbsUp /> ({tweet?.likes?.length})
                             </button>
                         </div>
                         <ul>

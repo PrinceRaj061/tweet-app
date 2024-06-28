@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { FaEdit } from 'react-icons/fa';
 import axios from 'axios';
 import './../styles.css';
 
@@ -101,7 +102,7 @@ function Account({ token }) {
                             <p>{user.email}</p>
                         </div>
                     </div>
-                    <button onClick={() => setIsEditing(true)}>Edit</button>
+                    <button onClick={() => setIsEditing(true)}>< FaEdit /></button>
                 </div>
             )}
         </div>
